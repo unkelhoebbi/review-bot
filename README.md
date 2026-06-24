@@ -27,3 +27,21 @@ TARGET_URL=https://deine-api.example.com/pfad AUTH_TOKEN=DEIN_BEARER_TOKEN npm s
 Es wird ein bereits vorhandener Token verwendet (keine neue Token-Beschaffung).
 Eine kleine Pipeline-Policy setzt bei jedem Request den Header
 `Authorization: Bearer <token>`.
+
+## Chat Completion
+
+`chat.js` macht eine minimale Chat Completion über
+[`@azure-rest/ai-inference`](https://www.npmjs.com/package/@azure-rest/ai-inference).
+Der bestehende Bearer-Token wird über eine statische `TokenCredential`
+durchgereicht (statt `AzureKeyCredential` oder `DefaultAzureCredential`).
+
+```bash
+TARGET_URL=https://<modell-endpoint> \
+AUTH_TOKEN=<bestehender-bearer-token> \
+MODEL=<modellname> \
+npm run chat -- "Deine Frage hier"
+```
+
+- `TARGET_URL` – Basis-Endpoint des Modells (ohne `/chat/completions`)
+- `AUTH_TOKEN` – bestehender Bearer-Token
+- `MODEL` – optional, je nach Endpoint nötig
