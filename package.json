@@ -1,0 +1,14 @@
+{
+  "name": "azure-bearer-request",
+  "version": "1.0.0",
+  "description": "Minimaler Azure-SDK-Client: ruft eine konfigurierbare URL mit einem bestehenden Bearer-Token auf.",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@azure-rest/core-client": "^2.3.1",
+    "@azure/core-auth": "^1.9.0"
+  }
+}
