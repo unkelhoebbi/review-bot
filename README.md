@@ -1,47 +1,45 @@
-# azure-bearer-request
+# azure-openai-chat
 
-Minimaler Single-File-Client auf Basis des [Azure SDK for JS](https://github.com/Azure/azure-sdk-for-js).
-Ruft eine **konfigurierbare URL** mit einem **bestehenden Bearer-Token** auf.
+Minimale **Chat Completion** gegen Azure OpenAI in **plain Java**, mit dem
+[`com.azure:azure-ai-openai`](https://central.sonatype.com/artifact/com.azure/azure-ai-openai)
+SDK aus Maven Central.
 
-## Setup
+## Voraussetzungen
 
-```bash
-npm install
-```
+- Java 17+
+- Maven 3.9+
+
+## Konfiguration
+
+Per Umgebungsvariable:
+
+- `AZURE_OPENAI_ENDPOINT` – Basis-Endpoint, z. B. `https://<resource>.openai.azure.com`
+- `DEPLOYMENT` – Deployment-Name aus dem Azure-Portal (z. B. `gpt-4o`)
+- `AZURE_OPENAI_KEY` – API-Key **oder**
+- `AUTH_TOKEN` – bestehender Bearer-/Entra-ID-Token
+
+Die Frage wird als CLI-Argument übergeben.
 
 ## Verwendung
 
-URL und Token sind per CLI-Argument oder Umgebungsvariable konfigurierbar
-(Argumente haben Vorrang):
-
 ```bash
-# Variante 1: Argumente
-npm start -- https://deine-api.example.com/pfad DEIN_BEARER_TOKEN
-
-# Variante 2: Umgebungsvariablen
-TARGET_URL=https://deine-api.example.com/pfad AUTH_TOKEN=DEIN_BEARER_TOKEN npm start
+AZURE_OPENAI_ENDPOINT=https://<resource>.openai.azure.com \
+DEPLOYMENT=gpt-4o \
+AZURE_OPENAI_KEY=<api-key> \
+mvn -q compile exec:java -Dexec.args="Deine Frage hier"
 ```
 
-## Auth
-
-Es wird ein bereits vorhandener Token verwendet (keine neue Token-Beschaffung).
-Eine kleine Pipeline-Policy setzt bei jedem Request den Header
-`Authorization: Bearer <token>`.
-
-## Chat Completion
-
-`chat.js` macht eine minimale Chat Completion über
-[`@azure-rest/ai-inference`](https://www.npmjs.com/package/@azure-rest/ai-inference).
-Der bestehende Bearer-Token wird über eine statische `TokenCredential`
-durchgereicht (statt `AzureKeyCredential` oder `DefaultAzureCredential`).
+Auth-Variante 2 (bestehender Bearer-Token statt API-Key):
 
 ```bash
-TARGET_URL=https://<modell-endpoint> \
-AUTH_TOKEN=<bestehender-bearer-token> \
-MODEL=<modellname> \
-npm run chat -- "Deine Frage hier"
+AZURE_OPENAI_ENDPOINT=https://<resource>.openai.azure.com \
+DEPLOYMENT=gpt-4o \
+AUTH_TOKEN=<bearer-token> \
+mvn -q compile exec:java -Dexec.args="Deine Frage hier"
 ```
 
-- `TARGET_URL` – Basis-Endpoint des Modells (ohne `/chat/completions`)
-- `AUTH_TOKEN` – bestehender Bearer-Token
-- `MODEL` – optional, je nach Endpoint nötig
+## Aufbau
+
+- `pom.xml` – Maven-Build mit `azure-ai-openai`-Dependency
+- `src/main/java/com/example/chat/ChatApp.java` – Chat Completion + Auswertung der Response
+  (Antwort-Text, Finish-Reason, Token-Usage)
