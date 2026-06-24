@@ -15,21 +15,12 @@ Per Umgebungsvariable:
 
 - `AZURE_OPENAI_ENDPOINT` – Basis-Endpoint, z. B. `https://<resource>.openai.azure.com`
 - `DEPLOYMENT` – Deployment-Name aus dem Azure-Portal (z. B. `gpt-4o`)
-- `AZURE_OPENAI_KEY` – API-Key **oder**
 - `AUTH_TOKEN` – bestehender Bearer-/Entra-ID-Token
 
+Die Authentifizierung erfolgt ausschließlich über den Bearer-Token (kein API-Key).
 Die Frage wird als CLI-Argument übergeben.
 
 ## Verwendung
-
-```bash
-AZURE_OPENAI_ENDPOINT=https://<resource>.openai.azure.com \
-DEPLOYMENT=gpt-4o \
-AZURE_OPENAI_KEY=<api-key> \
-mvn -q compile exec:java -Dexec.args="Deine Frage hier"
-```
-
-Auth-Variante 2 (bestehender Bearer-Token statt API-Key):
 
 ```bash
 AZURE_OPENAI_ENDPOINT=https://<resource>.openai.azure.com \
